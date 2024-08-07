@@ -28,7 +28,7 @@
         <!-- Expanded Row -->
         <tr v-if="expandedRowId === row.id && expandable ">
           <td :colspan="columns.length + 1" class="text-center bg-gray-100">
-            <row-detail-component></row-detail-component>
+            <row-detail-component :row="row"></row-detail-component>
           </td>
         </tr>
       </template>
