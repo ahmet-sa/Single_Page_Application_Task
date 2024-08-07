@@ -1,11 +1,13 @@
 please first if not have nodejs please dowload and set up 
-#nodejs
+# nodejs
 if you are not in folder you can run in terminal
 
 cd .\Single_Page_Application_Task\
 
 and write
-#yarn
+# yarn
+after yarn write 
+# yarn dev
 
 
 # Vue 3 + Vite
