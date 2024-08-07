@@ -25,24 +25,15 @@
     </div>
   </div>
 
-  <form-dialog
-      ref="formDialog"
-      v-model="addNew"
-      :title="dialogTitle"
-      :formSchema="form.schema"
-      :formModel="form.model"
-      @save="save"
-  ></form-dialog>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import FormDialog from "../dialog/formDialog.vue";
 import Dropdown from "./dropdown.vue";
 
 export default {
   name: "HeaderComponent",
-  components: {Dropdown, FormDialog },
+  components: {Dropdown },
   props: {
     form: {
       schema: Object,
@@ -54,23 +45,20 @@ export default {
     return {
       searchQuery: '',
       addNew: false,
-      options: [6, 10, 20, 30], // Options for items per page
+      options: [6, 10, 20, 30],
     };
   },
   computed: {
-    ...mapGetters(['itemsPerPage']), // Get itemsPerPage from Vuex store
+    ...mapGetters(['itemsPerPage']),
   },
   methods: {
-    ...mapActions(['updateItemsPerPage']), // Map updateItemsPerPage action
+    ...mapActions(['updateItemsPerPage']),
 
     onAdd() {
       this.addNew = true;
       this.$emit('addNew');
     },
-    save() {
-      this.$emit('postData', this.$refs.formDialog.$refs.formBuilder.getData());
-      this.addNew = false;
-    },
+
     handleItemsPerPageChange(event) {
       const val = parseInt(event.target.value, 10);
       this.updateItemsPerPage(val);

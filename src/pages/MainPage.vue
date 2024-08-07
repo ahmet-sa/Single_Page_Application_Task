@@ -1,12 +1,12 @@
 <template>
-  <header-component ref="header"  @refresh="refresh" @search="search" :form="form" @addNew="this.form.model={}" @postData="editPostData" :dialogTitle="dialogTitle" ></header-component>
-  <table-component :expandable="true"   put="users" delete="users" post="users" get="users"  :columns="columns"
+  <header-component ref="header"  @search="search" :form="form"  :dialogTitle="dialogTitle" ></header-component>
+  <table-component :search-value="searchValue" :expandable="true"   put="users" delete="users" post="users" get="users"  :columns="columns"
   :form="form"></table-component>
 </template>
 
 <script>
 import TableComponent from "../components/common/TableComponent.vue";
-import PostColumns from "../utils/constant.js";
+import {UserColumns} from "../utils/constant.js";
 import {getInput} from "../utils/common.js";
 import HeaderComponent from "../components/common/HeaderComponent.vue";
 
@@ -15,8 +15,9 @@ export default {
   components: {HeaderComponent, TableComponent},
   data(){
     return{
-      columns:PostColumns,
+      columns:UserColumns,
       dialogTitle:'Add New',
+      searchValue:"",
       form: {
         schema: {
           name: getInput('name', true, 12),
@@ -29,28 +30,8 @@ export default {
     }
   },
   methods: {
-    async refresh() {
-      await this.$refs.table.fetchData()
-          .then(() => {
-            this.$refs.header.loading = false;
-          })
-          .catch(error => {
-            console.error("Error fetching data:", error);
-            this.$refs.header.loading = false;
-          });
-    },
-    editPostData(data){
-      let obj={
-        name:data.name,
-        data:{year:data.year,
-          price:data.price }
-      }
-      this.$refs.table.addItem(obj)
-    },
-    formModel(model){
-      this.form.model=model
-    },
     search(val){
+      console.log(val)
       this.searchValue=val
     }
   },
