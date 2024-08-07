@@ -1,6 +1,6 @@
 <template>
   <header-component ref="header"  @refresh="refresh" @search="search" :form="form" @addNew="this.form.model={}" @postData="editPostData" :dialogTitle="dialogTitle" ></header-component>
-  <table-component   put="users" delete="users" post="users" get="users"  :columns="columns"
+  <table-component :expandable="true"   put="users" delete="users" post="users" get="users"  :columns="columns"
   :form="form"></table-component>
 </template>
 

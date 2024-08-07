@@ -1,5 +1,5 @@
 <template>
-  <table-component  :search-value="searchValue" put="users" delete="users" post="users" get="users"  :columns="columns"
+  <table-component :expandable="false"  :search-value="searchValue" put="users" delete="users" post="users" get="users"  :columns="columns"
                     :form="form"></table-component>
 </template>
 

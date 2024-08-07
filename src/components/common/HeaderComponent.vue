@@ -2,9 +2,9 @@
   <div class="mt-16 bg-white ma-4">
     <div class="w-full flex justify-between bg-#F2F2F2">
       <div class="flex no-wrap w-full justify-between">
-        <div class="w-[211px] h-[52px] left-[291px] top-[96px] !border-0">
+        <div class="!w-[212px] h-[52px] left-[291px] top-[96px] !border-0">
           <button
-              class="w-full h-full text-black font-montserrat bg-white text-sm leading-5 flex items-center !border-0 justify-center shadow-lg !rounded-tr-2xl !rounded-tl-2xl !rounded-br-2xl rounded-bl-[40px]"
+              class="!w-[212px] h-[52px] text-black font-montserrat bg-white text-sm leading-5 flex items-center !border-0 justify-center shadow-lg !rounded-tr-2xl !rounded-tl-2xl !rounded-br-2xl rounded-bl-[40px]"
               aria-label="Add"
               @click="onAdd"
           >
@@ -17,10 +17,9 @@
             placeholder="Search..."
             v-model="searchQuery"
         />
-        <dropdown class="shadow-lg !rounded-tr-2xr !rounded-tl-2xr !rounded-br-2xr rounded-br-[40px]"  :options="[6, 10, 20, 30]"
+        <dropdown class="shadow-lg bg-white !rounded-tr-2xr !rounded-tl-2xr !rounded-br-2xr rounded-br-[40px] bg-white w-[211px] "  :options="[6, 10, 20, 30]"
                    :itemsPerPage="itemsPerPage"
                    @update:itemsPerPage="updateItemsPerPage">
-
         </dropdown>
       </div>
     </div>
