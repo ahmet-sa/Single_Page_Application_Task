@@ -17,19 +17,11 @@
             placeholder="Search..."
             v-model="searchQuery"
         />
-        <div class="pagination-select-box">
-          <label for="itemsPerPage" class="sr-only">Items per page</label>
-          <select
-              id="itemsPerPage"
-              v-model="itemsPerPage"
-              @change="handleItemsPerPageChange"
-              class="w-[120px] h-[40px] border rounded-md"
-          >
-            <option v-for="option in options" :key="option" :value="option">
-              {{ option }}
-            </option>
-          </select>
-        </div>
+        <dropdown class="shadow-lg !rounded-tr-2xr !rounded-tl-2xr !rounded-br-2xr rounded-br-[40px]"  :options="[6, 10, 20, 30]"
+                   :itemsPerPage="itemsPerPage"
+                   @update:itemsPerPage="updateItemsPerPage">
+
+        </dropdown>
       </div>
     </div>
   </div>
@@ -47,10 +39,11 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import FormDialog from "../dialog/formDialog.vue";
+import Dropdown from "./dropdown.vue";
 
 export default {
   name: "HeaderComponent",
-  components: { FormDialog },
+  components: {Dropdown, FormDialog },
   props: {
     form: {
       schema: Object,

@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-16 mx-4 bg-[#D9D9D9] p-10 rounded-t-[20px]">
+  <div class="mt-16 mx-4 bg-[#D9D9D9] p-10 rounded-t-[70px]">
     <table class="w-full rounded-t-[20px] font-montserrat border-separate border-spacing-y-[20px]">
       <thead class="h-16 text-[#606060] text-center uppercase bg-red border-l-[10px] border-r-[10px] border-[#000]">
       <tr class="items-center my-2">
@@ -17,11 +17,18 @@
       </tbody>
     </table>
 
-    <div class="pagination-controls">
-      <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
-      <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+    <div class="flex justify-end w-full">
+      <div class="flex justify-center mt-4 gap-4">
+        <button @click="previousPage" :disabled="currentPage === 1" class="px-4 py-2 bg-gray-200 rounded-md disabled:opacity-50 flex items-center">
+          <span class="material-icons mr-2">arrow_back</span>
+        </button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+        <button @click="nextPage" :disabled="currentPage === totalPages" class="px-4 py-2 bg-gray-200 rounded-md disabled:opacity-50 flex items-center">
+          <span class="material-icons mr-2">arrow_forward</span>
+        </button>
+      </div>
     </div>
+
   </div>
 
   <form-dialogs
@@ -119,9 +126,6 @@ export default {
       }
     },
 
-
-
-
     save() {
       this.putItem(this.editItem);
     },
@@ -159,17 +163,9 @@ export default {
 }
 </script>
 
-<style>
-thead {
-  border-left: 10px solid #000;
-  border-right: 10px solid #000;
-}
-
+<style scoped>
 table {
-  width: 100%;
   border-spacing: 0 20px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
 }
 
 th,
@@ -179,22 +175,5 @@ td {
 
 tr {
   border-top: 1px solid transparent;
-}
-
-thead {
-  background-color: black;
-  color: white;
-}
-
-tbody {
-  background-color: white;
-  color: black;
-}
-
-.pagination-controls {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
 }
 </style>
