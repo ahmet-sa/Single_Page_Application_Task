@@ -4,23 +4,12 @@
       <thead>
       <tr>
         <th v-for="column in columns" :key="column.name" class="p-3 text-left border-b border-gray-200 bg-gray-100 font-bold">{{ column.label }}</th>
-        <th class="p-3 text-left border-b border-gray-200 bg-gray-100 font-bold">Actions</th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="row in filteredRows" :key="row.id" class="even:bg-gray-50">
 
         <td v-for="column in columns" :key="column.name" class="p-3 border-b border-gray-200">{{ row[column?.field] }}</td>
-        <td class="p-3 border-b border-gray-200">
-          <button :disabled="row.loadingItem" class="px-4 py-2 mr-2 rounded bg-blue-500 text-white hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed relative">
-            Edit
-            <span class="hidden absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap tooltip">Edit Item</span>
-          </button>
-          <button :disabled="row.loadingDelete" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed relative" @click="openDeleteDialog(row)">
-            Delete
-            <span class="hidden absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap tooltip">Delete Item</span>
-          </button>
-        </td>
       </tr>
       </tbody>
     </table>

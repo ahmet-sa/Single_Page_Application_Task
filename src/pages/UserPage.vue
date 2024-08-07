@@ -1,5 +1,4 @@
 <template>
-  <header-component ref="header"  @refresh="refresh" @search="search" :form="form" @addNew="this.form.model={}" @postData="editPostData" :dialogTitle="dialogTitle" ></header-component>
   <table-component  :search-value="searchValue" put="users" delete="users" post="users" get="users"  :columns="columns"
                     :form="form"></table-component>
 </template>
@@ -40,17 +39,7 @@ export default {
             this.$refs.header.loading = false;
           });
     },
-    editPostData(data){
-      let obj={
-        name:data.name,
-        data:{year:data.year,
-          price:data.price }
-      }
-      this.$refs.table.addItem(obj)
-    },
-    formModel(model){
-      this.form.model=model
-    },
+
     search(val){
       this.searchValue=val
     }

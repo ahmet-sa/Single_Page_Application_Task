@@ -1,31 +1,38 @@
 <template>
-  <div class="mt-16 bg-white ma-4">
-    <div class="w-full flex justify-between">
-      <div class="flex no-wrap">
-        <button
-            class="ml-4 py-2 px-4 rounded text-white cursor-pointer transition bg-blue-500 hover:bg-blue-600 relative"
-            aria-label="Add"
-            @click="onAdd"
-        >
-          Add Item
-          <span class="hidden bg-gray-800 text-white p-2 rounded absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 tooltip">Add New</span>
-        </button>
+  <div class="mt-16 bg-white ma-4  ">
+    <div class="w-full flex justify-between bg-#F2F2F2">
+
+      <div class="flex no-wrap w-full justify-between">
+
+        <div class=" w-[211px] h-[52px] left-[291px] top-[96px]  !border-0 ">
+          <button
+              class=" w-full h-full text-black font-montserrat bg-white text-sm leading-5 flex items-center !border-0 justify-center shadow-lg !rounded-tr-2xl !rounded-tl-2xl !rounded-br-2xl rounded-bl-[40px] "
+              aria-label="Add"
+              @click="onAdd"
+          >
+            <span class="mr-3">Kullanıcı Ekle</span>
+
+          </button>
+        </div>
         <input
             type="text"
-            class="ml-4 py-2 px-4 border rounded"
+            class="ml-4 py-2 px-4 border rounded w-full mr-8  border-0 shadow-lg"
             placeholder="Search..."
             v-model="searchQuery"
         />
+
+        <div class=" w-[211px] h-[52px] left-[291px] top-[96px]  !border-0 ">
+          <button
+              class=" w-full h-full text-black font-montserrat bg-white text-sm leading-5 flex items-center !border-0 justify-center shadow-lg !rounded-tr-2xl !rounded-tl-2xl !rounded-br-2xl rounded-bl-[40px] "
+              aria-label="Add"
+              @click="onAdd"
+          >
+            <span class="mr-3">Kullanıcı Ekle</span>
+
+          </button>
+        </div>
       </div>
-      <button
-          class="py-2 px-4 rounded text-white cursor-pointer transition bg-blue-500 hover:bg-blue-600 relative"
-          :class="{ 'opacity-50 cursor-not-allowed': loading }"
-          @click="refresh"
-      >
-        <span v-if="!loading">Refresh</span>
-        <span v-else>Loading...</span>
-        <span class="hidden bg-gray-800 text-white p-2 rounded absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 tooltip">Refresh Data</span>
-      </button>
+
     </div>
   </div>
 
@@ -44,7 +51,7 @@ import FormDialog from "../dialog/formDialog.vue";
 
 export default {
   name: "HeaderComponent",
-  components: { FormDialog },
+  components: {FormDialog},
   props: {
     form: {
       schema: Object,

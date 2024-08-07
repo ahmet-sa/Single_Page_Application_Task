@@ -1,14 +1,14 @@
 <template>
-  <div class="flex flex-col h-screen">
+  <div class="flex flex-col h-screen bg-#F2F2F2">
     <header class="bg-gray-100 shadow p-2">
       <div class="flex items-center" :class="leftDrawerOpen ? 'pl-50' : ''">
-        <button @click="toggleLeftDrawer" aria-label="Menu" class="p-2 rounded hover:bg-gray-200">
+        <button @click="toggleLeftDrawer" aria-label="Menu" class="p-3 rounded hover:bg-gray-200 border-0 text-16px text-#606060   bg-white  ">
           ☰
         </button>
       </div>
     </header>
 
-    <aside :class="['fixed top-0 left-0 h-full w-200px bg-white shadow-md transition-transform', { 'transform -translate-x-full': !leftDrawerOpen }]">
+    <aside :class="['fixed top-0 left-0 h-full w-200px bg-white shadow-md transition-transform shadow-md', { 'transform -translate-x-full': !leftDrawerOpen }]">
       <div class="p-4 text-center text-lg font-bold text-#8B8C8D ">MENU</div>
       <hr class="my-2" />
       <ul class="list-none p-0 m-0">
