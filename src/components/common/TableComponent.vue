@@ -1,27 +1,37 @@
 <template>
-  <div class="mt-16 mx-4">
-    <table class="w-full border-collapse">
-      <thead>
-      <tr>
-        <th v-for="column in columns" :key="column.name" class="p-3 text-left border-b border-gray-200 bg-gray-100 font-bold">{{ column.label }}</th>
+  <div class="mt-16 mx-4 bg-[#D9D9D9] p-10 rounded-t-[20px]">
+    <table class="w-full rounded-t-[20px] font-montserrat border-separate border-spacing-y-[20px]">
+      <thead class="h-16 text-[#606060] text-center uppercase bg-red border-l-[10px] border-r-[10px] border-[#000]">
+      <tr class="items-center my-2">
+        <th v-for="column in columns" :key="column.name" class="text-[#606060] text-center uppercase bg-white">
+          {{ column.label }}
+        </th>
       </tr>
       </thead>
-      <tbody>
-      <tr v-for="row in filteredRows" :key="row.id" class="even:bg-gray-50">
-
-        <td v-for="column in columns" :key="column.name" class="p-3 border-b border-gray-200">{{ row[column?.field] }}</td>
+      <tbody class="bg-white text-black">
+      <tr v-for="row in paginatedRows" :key="row.id">
+        <td v-for="column in columns" :key="column.name" class="p-5 text-center">
+          {{ row[column?.field] }}
+        </td>
       </tr>
       </tbody>
     </table>
+
+    <div class="pagination-controls">
+      <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+    </div>
   </div>
-  <form-dialog
+
+  <form-dialogs
       ref="formDialog"
       v-model="edit"
       :title="title"
       :formSchema="form.schema"
       :formModel="form.model"
       @save="save"
-  ></form-dialog>
+  ></form-dialogs>
 
   <confirmation-dialog
       ref="confirmationDialog"
@@ -31,13 +41,14 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import FormDialog from "../dialog/formDialog.vue";
 import ConfirmationDialog from "../dialog/confirmationDialog.vue";
 import axiosInstance from "../../../axiosConfig.js";
 
 export default {
   name: 'TableComponent',
-  components: {ConfirmationDialog, FormDialog},
+  components: { ConfirmationDialog, FormDialog },
   props: {
     form: Object,
     columns: { type: Array, required: true },
@@ -56,11 +67,27 @@ export default {
       loading: false,
       editItem: null,
       deleteItemObject: null,
+      currentPage: 1, // Current page number
     };
   },
   computed: {
+    ...mapGetters(['itemsPerPage']),
+
+    paginatedRows() {
+      let start = parseInt((this.currentPage - 1) * this.itemsPerPage, 10);
+      let end = parseInt(start + this.itemsPerPage, 10);
+
+      console.log(start);
+      console.log(end);
+
+      return this.filteredRows.slice(start, end);
+    },
+
+    totalPages() {
+      return Math.ceil(this.filteredRows.length / this.itemsPerPage);
+    },
+
     filteredRows() {
-      console.log(this.rows)
       if (!this.searchValue) return this.rows;
       const search = this.searchValue.toLowerCase();
       return this.rows.filter(row =>
@@ -69,6 +96,8 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['updateItemsPerPage']),
+
     async fetchData() {
       this.loading = true;
       try {
@@ -80,6 +109,7 @@ export default {
         this.loading = false;
       }
     },
+
     async addItem(item) {
       try {
         await axiosInstance.post(this.post, item);
@@ -88,52 +118,39 @@ export default {
         console.error('Error adding item:', error);
       }
     },
-    async editItemGet(item) {
-      item.loadingItem = true;
-      try {
-        const response = await axiosInstance.get(`${this.get}/${item.id}`);
-        this.$emit('formModel', response.data);
-        this.edit = true;
-        this.editItem = item;
-      } catch (error) {
-        console.error('Error editing item:', error);
-      } finally {
-        item.loadingItem = false;
-      }
-    },
-    async putItem(item) {
-      try {
-        const formData = this.$refs.formDialog.$refs.formBuilder.getData();
-        await axiosInstance.put(`${this.put}/${item.id}`, formData);
-        this.edit = false;
-        this.fetchData();
-      } catch (error) {
-        console.error('Error updating item:', error);
-      }
-    },
-    async deleteItem() {
-      this.$refs.confirmationDialog.loading = true;
-      try {
-        await axiosInstance.delete(`${this.delete}/${this.deleteItemObject.id}`);
-        this.fetchData();
-      } catch (error) {
-        console.error('Error deleting item:', error);
-      } finally {
-        this.deleteItemObject.loadingDelete = false;
-        this.$refs.confirmationDialog.loading = false;
-        this.$refs.confirmationDialog.dialog = false;
-      }
-    },
+
+
+
+
     save() {
       this.putItem(this.editItem);
     },
+
     openDeleteDialog(item) {
       item.loadingDelete = true;
       this.deleteItemObject = item;
       this.$refs.confirmationDialog.dialog = true;
     },
+
     cancelDelete() {
       this.deleteItemObject.loadingDelete = false;
+    },
+
+    previousPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    }
+  },
+  watch: {
+    itemsPerPage() {
+      this.currentPage = 1; // Reset to the first page when itemsPerPage changes
     }
   },
   mounted() {
@@ -141,3 +158,43 @@ export default {
   }
 }
 </script>
+
+<style>
+thead {
+  border-left: 10px solid #000;
+  border-right: 10px solid #000;
+}
+
+table {
+  width: 100%;
+  border-spacing: 0 20px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+th,
+td {
+  padding: 20px;
+}
+
+tr {
+  border-top: 1px solid transparent;
+}
+
+thead {
+  background-color: black;
+  color: white;
+}
+
+tbody {
+  background-color: white;
+  color: black;
+}
+
+.pagination-controls {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+</style>

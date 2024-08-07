@@ -1,8 +1,8 @@
 const PostColumns = [
     { label: 'ID', field: 'id' },
-    { label: 'Name', field: 'name' },
+    { label: 'FirstName', field: 'firstname' },
+    { label: 'LastName', field: 'lastname' },
     { label: 'Phone', field: 'phone' },
-    { label: 'Username', field: 'username' },
     { label: 'Website', field: 'website' },
 
 ];
