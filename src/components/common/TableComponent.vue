@@ -3,7 +3,7 @@
     <table class="w-full rounded-t-[20px] font-montserrat border-separate border-spacing-y-[20px]">
       <thead class="h-16 text-[#606060] text-center uppercase bg-red border-l-[10px] border-r-[10px] border-[#000]">
       <tr class="items-center my-2">
-        <th class="text-center bg-white">
+        <th v-if="expandable" class="text-center bg-white">
           <input type="checkbox" v-model="selectAll" @change="toggleSelectAll" />
         </th>
         <th v-for="column in columns" :key="column.field" class="text-[#606060] text-center uppercase bg-white">
@@ -14,8 +14,8 @@
       </thead>
       <tbody class="bg-white text-black">
       <template v-for="row in paginatedRows" :key="row.id">
-        <tr :class="{ 'bg-[#E3FFE4]': checkSelected(row) }">
-          <td class="p-5 text-center">
+        <tr :class="{ 'bg-[#E3FFE4]': checkSelected(row)&& expandable }">
+          <td v-if="expandable" class="p-5 text-center">
             <input type="checkbox" :value="row.id" :checked="checkSelected(row)" @change="toggleRowSelection(row)" />
           </td>
           <td v-for="column in columns" :key="column.field" class="p-5 text-center">
@@ -58,7 +58,6 @@ export default {
   name: 'TableComponent',
   components: { RowDetailComponent },
   props: {
-    form: Object,
     columns: Array,
     searchValue: String,
     get: { type: String, required: true },

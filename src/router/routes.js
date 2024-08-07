@@ -1,15 +1,16 @@
 const routes = [
   {
     path: '/',
-    component: () => import('C:\\Users\\ahmee\\OneDrive\\Masaüstü\\d7k\\d7kTask\\src\\layout\\MainLayout.vue'),
+    component: () => import('@/layout/MainLayout.vue'), // '@' is a common alias for 'src'
     children: [
-      { path: '', component: () => import('C:\\Users\\ahmee\\OneDrive\\Masaüstü\\d7k\\d7kTask\\src\\pages\\MainPage.vue') },
-      { path: 'user', component: () => import('C:\\Users\\ahmee\\OneDrive\\Masaüstü\\d7k\\d7kTask\\src\\pages\\UserPage.vue') }
+      { path: '', component: () => import('@/pages/MainPage.vue') },
+      { path: 'post', component: () => import('@/pages/MainPage.vue') },
+      { path: 'user', component: () => import('@/pages/UserPage.vue') }
     ]
   },
   {
     path: '/:catchAll(.*)*',
-    component: () => import('C:\\Users\\ahmee\\OneDrive\\Masaüstü\\d7k\\d7kTask\\src\\pages\\ErrorNotFound.vue')
+    component: () => import('@/pages/ErrorNotFound.vue')
   }
 ]
 

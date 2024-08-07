@@ -1,4 +1,3 @@
-// Define UserColumns
 export const UserColumns = [
     { label: 'ID', field: 'id' },
     { label: 'FirstName', field: 'firstname' },
@@ -7,7 +6,6 @@ export const UserColumns = [
     { label: 'Website', field: 'website' },
 ];
 
-// Define PostColumns
 export const PostColumns = [
     { label: 'ID', field: 'id' },
     { label: 'User ID', field: 'userId' },

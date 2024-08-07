@@ -49,10 +49,8 @@ export default {
   methods: {
     async fetchData() {
       try {
-        // Use template literals to insert the id into the URL
         const response = await axiosInstance.get(`posts/${this.row.id}`);
         this.detail = response.data;  // Store the fetched data
-        console.log(response);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
