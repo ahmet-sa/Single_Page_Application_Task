@@ -152,7 +152,7 @@ export default {
     }
 
   },
-  created() {
+  mounted() {
     this.processListeners();
   }
 }

@@ -13,7 +13,8 @@
 
 <script>
 
-import FormBuilder from "@/components/form-builder/form-builder.vue";
+
+import FormBuilder from "../form-builder/form-builder.vue";
 
 export default {
   name: "FormDialog",

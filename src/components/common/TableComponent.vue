@@ -1,30 +1,30 @@
 <template>
-  <div class="mt-70px ma-4">
-    <table class="custom-table">
+  <div class="mt-16 mx-4">
+    <table class="w-full border-collapse">
       <thead>
       <tr>
-        <th v-for="column in columns" :key="column.name">{{ column.label }}</th>
-        <th>Actions</th>
+        <th v-for="column in columns" :key="column.name" class="p-3 text-left border-b border-gray-200 bg-gray-100 font-bold">{{ column.label }}</th>
+        <th class="p-3 text-left border-b border-gray-200 bg-gray-100 font-bold">Actions</th>
       </tr>
       </thead>
       <tbody>
-      <tr v-for="row in filteredRows" :key="row.name">
-        <td v-for="column in columns" :key="column.name">{{ row[column.name] }}</td>
-        <td>
-          <button :disabled="row.loadingItem" class="btn primary" @click="editItemGet(row)">
+      <tr v-for="row in filteredRows" :key="row.id" class="even:bg-gray-50">
+
+        <td v-for="column in columns" :key="column.name" class="p-3 border-b border-gray-200">{{ row[column?.field] }}</td>
+        <td class="p-3 border-b border-gray-200">
+          <button :disabled="row.loadingItem" class="px-4 py-2 mr-2 rounded bg-blue-500 text-white hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed relative">
             Edit
-            <span class="tooltip">Edit Item</span>
+            <span class="hidden absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap tooltip">Edit Item</span>
           </button>
-          <button :disabled="row.loadingDelete" class="btn primary" @click="openDeleteDialog(row)">
+          <button :disabled="row.loadingDelete" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed relative" @click="openDeleteDialog(row)">
             Delete
-            <span class="tooltip">Delete Item</span>
+            <span class="hidden absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap tooltip">Delete Item</span>
           </button>
         </td>
       </tr>
       </tbody>
     </table>
   </div>
-
   <form-dialog
       ref="formDialog"
       v-model="edit"
@@ -42,9 +42,9 @@
 </template>
 
 <script>
-
-import FormDialog from "@/components/dialog/formDialog.vue";
-import ConfirmationDialog from "@/components/dialog/confirmationDialog.vue";
+import FormDialog from "../dialog/formDialog.vue";
+import ConfirmationDialog from "../dialog/confirmationDialog.vue";
+import axiosInstance from "../../../axiosConfig.js";
 
 export default {
   name: 'TableComponent',
@@ -52,7 +52,6 @@ export default {
   props: {
     form: Object,
     columns: { type: Array, required: true },
-    apiType: { type: String, required: true, validator: value => ['person', 'order'].includes(value) },
     searchValue: String,
     get: { type: String, required: true },
     post: { type: String, required: true },
@@ -72,6 +71,7 @@ export default {
   },
   computed: {
     filteredRows() {
+      console.log(this.rows)
       if (!this.searchValue) return this.rows;
       const search = this.searchValue.toLowerCase();
       return this.rows.filter(row =>
@@ -83,7 +83,7 @@ export default {
     async fetchData() {
       this.loading = true;
       try {
-        const response = await this[`$${this.apiType}`].get(this.get);
+        const response = await axiosInstance.get(this.get);
         this.rows = response.data;
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -93,7 +93,7 @@ export default {
     },
     async addItem(item) {
       try {
-        await this[`$${this.apiType}`].post(this.post, item);
+        await axiosInstance.post(this.post, item);
         this.fetchData();
       } catch (error) {
         console.error('Error adding item:', error);
@@ -102,7 +102,7 @@ export default {
     async editItemGet(item) {
       item.loadingItem = true;
       try {
-        const response = await this[`$${this.apiType}`].get(`${this.get}/${item.id}`);
+        const response = await axiosInstance.get(`${this.get}/${item.id}`);
         this.$emit('formModel', response.data);
         this.edit = true;
         this.editItem = item;
@@ -115,7 +115,7 @@ export default {
     async putItem(item) {
       try {
         const formData = this.$refs.formDialog.$refs.formBuilder.getData();
-        await this[`$${this.apiType}`].put(`${this.put}/${item.id}`, formData);
+        await axiosInstance.put(`${this.put}/${item.id}`, formData);
         this.edit = false;
         this.fetchData();
       } catch (error) {
@@ -125,7 +125,7 @@ export default {
     async deleteItem() {
       this.$refs.confirmationDialog.loading = true;
       try {
-        await this[`$${this.apiType}`].delete(`${this.delete}/${this.deleteItemObject.id}`);
+        await axiosInstance.delete(`${this.delete}/${this.deleteItemObject.id}`);
         this.fetchData();
       } catch (error) {
         console.error('Error deleting item:', error);
