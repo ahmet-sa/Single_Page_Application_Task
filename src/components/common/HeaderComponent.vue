@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-16 bg-white ma-4">
+  <div class="mt-8 bg-white ma-4">
     <div class="w-full flex justify-between bg-#F2F2F2">
       <div class="flex no-wrap w-full justify-between">
         <div class="!w-[212px] h-[52px] left-[291px] top-[96px] !border-0">
@@ -17,23 +17,25 @@
             placeholder="Search..."
             v-model="searchQuery"
         />
-        <dropdown class="shadow-lg bg-white !rounded-tr-2xr !rounded-tl-2xr !rounded-br-2xr rounded-br-[40px] bg-white w-[211px] "  :options="[6, 10, 20, 30]"
-                   :itemsPerPage="itemsPerPage"
-                   @update:itemsPerPage="updateItemsPerPage">
-        </dropdown>
+        <dropdown
+            class="shadow-lg bg-white !rounded-tr-2xr !rounded-tl-2xr !rounded-br-2xr rounded-br-[40px] bg-white w-[211px]"
+            :options="[6, 10, 20, 30]"
+            :itemsPerPage="itemsPerPage"
+            @update:itemsPerPage="updateItemsPerPage"
+        ></dropdown>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import Dropdown from "./dropdown.vue";
+import axiosInstance from "../../../axiosConfig.js";
 
 export default {
   name: "HeaderComponent",
-  components: {Dropdown },
+  components: { Dropdown },
   props: {
     form: {
       schema: Object,
@@ -49,20 +51,29 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['itemsPerPage']),
+    ...mapGetters(['itemsPerPage', 'selectedRows']),
   },
   methods: {
     ...mapActions(['updateItemsPerPage']),
 
-    onAdd() {
+    async onAdd() {
       this.addNew = true;
       this.$emit('addNew');
-    },
+      console.log('Selected Rows:', this.selectedRows);
 
-    handleItemsPerPageChange(event) {
-      const val = parseInt(event.target.value, 10);
-      this.updateItemsPerPage(val);
+      for (const row of this.selectedRows) {
+        const rowData = { ...row };
+        delete rowData.id;
+
+        try {
+          await axiosInstance.post("users", rowData);
+          console.log('Posted row:', rowData);
+        } catch (error) {
+          console.error('Error posting row:', rowData, error);
+        }
+      }
     }
+
   },
   watch: {
     searchQuery(newQuery) {

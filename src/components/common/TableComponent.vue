@@ -1,20 +1,12 @@
 <template>
-  <div class="mt-16 mx-4 bg-[#D9D9D9] p-10 rounded-t-[45px]">
+  <div class="mt-6 mx-4 bg-[#D9D9D9] p-10 rounded-t-[45px]">
     <table class="w-full rounded-t-[20px] font-montserrat border-separate border-spacing-y-[20px]">
       <thead class="h-16 text-[#606060] text-center uppercase bg-red border-l-[10px] border-r-[10px] border-[#000]">
       <tr class="items-center my-2">
         <th class="text-center bg-white">
-          <input
-              type="checkbox"
-              v-model="selectAll"
-              @change="toggleSelectAll"
-          />
+          <input type="checkbox" v-model="selectAll" @change="toggleSelectAll" />
         </th>
-        <th
-            v-for="column in columns"
-            :key="column.field"
-            class="text-[#606060] text-center uppercase bg-white"
-        >
+        <th v-for="column in columns" :key="column.field" class="text-[#606060] text-center uppercase bg-white">
           {{ column.label }}
         </th>
         <th class="text-center text-[#606060] bg-white"></th>
@@ -22,14 +14,9 @@
       </thead>
       <tbody class="bg-white text-black">
       <template v-for="row in paginatedRows" :key="row.id">
-        <tr :class="{ 'bg-[#E3FFE4]': checkSelected(row.id) }">
+        <tr :class="{ 'bg-[#E3FFE4]': checkSelected(row) }">
           <td class="p-5 text-center">
-            <input
-                type="checkbox"
-                v-model="selectedRows"
-                :value="row.id"
-                @change="updateSelectAll"
-            />
+            <input type="checkbox" :value="row.id" :checked="checkSelected(row)" @change="toggleRowSelection(row)" />
           </td>
           <td v-for="column in columns" :key="column.field" class="p-5 text-center">
             {{ row[column.field] }}
@@ -40,40 +27,27 @@
               </span>
           </td>
         </tr>
-        <!-- Expanded Row -->
         <tr v-if="expandedRowId === row.id && expandable">
-          <td :colspan="columns.length + 1" class="text-center bg-gray-100">
+          <td :colspan="columns.length+2" class="text-center bg-[#F8F6F6] w-full">
             <row-detail-component :row="row"></row-detail-component>
           </td>
         </tr>
       </template>
       </tbody>
     </table>
-
     <div class="flex justify-end w-full mt-4">
       <div class="h-12 w-52 bg-white rounded-full flex items-center justify-center">
-        <div
-            :class="{'opacity-50 cursor-not-allowed': currentPage === 1}"
-            @click="previousPage"
-            class="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer"
-        >
+        <div :class="{'opacity-50 cursor-not-allowed': currentPage === 1}" @click="previousPage" class="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer">
           <span class="material-icons h-5">arrow_back</span>
         </div>
         <span class="mx-3">Page {{ currentPage }} of {{ totalPages }}</span>
-        <div
-            :class="{'opacity-50 cursor-not-allowed': currentPage === totalPages}"
-            @click="nextPage"
-            class="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer"
-        >
+        <div :class="{'opacity-50 cursor-not-allowed': currentPage === totalPages}" @click="nextPage" class="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer">
           <span class="material-icons h-5">arrow_forward</span>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-
-
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
@@ -96,85 +70,56 @@ export default {
   },
   data() {
     return {
-      title: 'Edit Item',
-      edit: false,
       rows: this.initialData,
-      loading: false,
-      editItem: null,
-      deleteItemObject: null,
       currentPage: 1,
       expandedRowId: null,
-      selectedRows: [],
       selectAll: false,
     };
   },
   computed: {
-    ...mapGetters(['itemsPerPage']),
-
+    ...mapGetters(['itemsPerPage', 'selectedRows']),
     paginatedRows() {
-      let start = parseInt((this.currentPage - 1) * this.itemsPerPage, 10);
-      let end = parseInt(start + this.itemsPerPage, 10);
-      return this.filteredRows.slice(start, end);
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      return this.filteredRows.slice(start, start + this.itemsPerPage);
     },
-
     totalPages() {
       return Math.ceil(this.filteredRows.length / this.itemsPerPage);
     },
-
     filteredRows() {
-      console.log(this.searchValue)
       if (!this.searchValue) return this.rows;
       const search = this.searchValue.toLowerCase();
-      console.log(search)
-
-      return this.rows.filter(row =>
-          Object.values(row).some(value => value?.toString().toLowerCase().includes(search))
-      );
+      return this.rows.filter(row => Object.values(row).some(value => value?.toString().toLowerCase().includes(search)));
     }
   },
   methods: {
-    ...mapActions(['updateItemsPerPage']),
-
+    ...mapActions(['updateItemsPerPage', 'updateSelectedRows']),
     async fetchData() {
-      this.loading = true;
       try {
         const response = await axiosInstance.get(this.get);
         this.rows = response.data;
       } catch (error) {
         console.error('Error fetching data:', error);
-      } finally {
-        this.loading = false;
       }
     },
-
-    checkSelected(id) {
-      return this.selectedRows.includes(id);
+    checkSelected(row) {
+      return this.selectedRows.some(selectedRow => selectedRow.id === row.id);
     },
-
     toggleSelectAll() {
-      if (this.selectAll) {
-        this.selectedRows = this.paginatedRows.map(row => row.id);
-      } else {
-        this.selectedRows = [];
-      }
+      const allRows = this.filteredRows;
+      this.updateSelectedRows(this.selectAll ? allRows : []);
     },
-
-    updateSelectAll() {
-      this.selectAll = this.paginatedRows.length > 0 && this.selectedRows.length === this.paginatedRows.length;
+    toggleRowSelection(row) {
+      const newSelectedRows = this.selectedRows.some(selectedRow => selectedRow.id === row.id)
+          ? this.selectedRows.filter(selectedRow => selectedRow.id !== row.id)
+          : [...this.selectedRows, row];
+      this.updateSelectedRows(newSelectedRows);
     },
-
     previousPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-      }
+      if (this.currentPage > 1) this.currentPage--;
     },
-
     nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-      }
+      if (this.currentPage < this.totalPages) this.currentPage++;
     },
-
     toggleExpand(rowId) {
       this.expandedRowId = this.expandedRowId === rowId ? null : rowId;
     }
@@ -183,9 +128,8 @@ export default {
     itemsPerPage() {
       this.currentPage = 1;
     },
-
-    selectedRows(newVal) {
-      this.selectAll = this.filteredRows.length > 0 && newVal.length === this.filteredRows.length;
+    selectedRows() {
+      this.selectAll = this.filteredRows.length && this.selectedRows.length === this.filteredRows.length;
     }
   },
   mounted() {
@@ -194,21 +138,13 @@ export default {
 }
 </script>
 
-
-
-
-
-
 <style scoped>
 table {
   border-spacing: 0 20px;
 }
-
-th,
-td {
+th, td {
   padding: 20px;
 }
-
 tr {
   border-top: 1px solid transparent;
 }

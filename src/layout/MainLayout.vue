@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-screen bg-#F2F2F2">
-    <header class="bg-gray-100 shadow p-2">
+    <header class="bg-gray-100  pl-2">
       <div class="flex items-center" :class="leftDrawerOpen ? 'pl-50' : ''">
         <button @click="toggleLeftDrawer" aria-label="Menu" class="p-3 rounded hover:bg-gray-200 border-0 text-16px text-#606060   bg-white  ">
           ☰
@@ -48,7 +48,7 @@ export default defineComponent({
   data() {
     return {
       linksList,
-      leftDrawerOpen: false
+      leftDrawerOpen: true
     }
   },
   methods: {

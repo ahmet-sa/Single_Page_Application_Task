@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between w-full bg-#F2F2F2 ">
+  <div class="flex justify-between w-full  ">
     <div>
       <img class="w-128px h-128px rounded-full" :src="detail.image" ></img>
     </div>
