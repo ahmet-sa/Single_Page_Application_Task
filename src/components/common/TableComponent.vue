@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-6 mx-4 bg-[#D9D9D9] p-10 rounded-t-[45px]">
+  <div class="mt-6 mx-4 mb-20px bg-[#D9D9D9] drop-shadow-md p-10 rounded-t-[45px]">
     <table class="w-full rounded-t-[20px] font-montserrat border-separate border-spacing-y-[20px]">
       <thead class="h-16 text-[#606060] text-center uppercase bg-red border-l-[10px] border-r-[10px] border-[#000]">
       <tr class="items-center my-2">
@@ -35,15 +35,16 @@
       </template>
       </tbody>
     </table>
-    <div class="flex justify-end w-full mt-4">
-      <div class="h-12 w-52 bg-white rounded-full flex items-center justify-center">
-        <div :class="{'opacity-50 cursor-not-allowed': currentPage === 1}" @click="previousPage" class="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer">
-          <span class="material-icons h-5">arrow_back</span>
-        </div>
-        <span class="mx-3">Page {{ currentPage }} of {{ totalPages }}</span>
-        <div :class="{'opacity-50 cursor-not-allowed': currentPage === totalPages}" @click="nextPage" class="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer">
-          <span class="material-icons h-5">arrow_forward</span>
-        </div>
+
+  </div>
+  <div class="flex justify-end w-full my-4 S">
+    <div class="h-12 w-52 bg-white rounded-full flex items-center justify-center">
+      <div :class="{'opacity-50 cursor-not-allowed': currentPage === 1}" @click="previousPage" class="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer">
+        <span class="material-icons h-5">arrow_back</span>
+      </div>
+      <span class="mx-3">Page {{ currentPage }} of {{ totalPages }}</span>
+      <div :class="{'opacity-50 cursor-not-allowed': currentPage === totalPages}" @click="nextPage" class="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer">
+        <span class="material-icons h-5">arrow_forward</span>
       </div>
     </div>
   </div>

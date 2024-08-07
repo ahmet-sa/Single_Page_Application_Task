@@ -21,7 +21,7 @@
       </ul>
     </aside>
 
-    <main class="flex-1 px-4" :class="leftDrawerOpen ? 'pl-63' : 'pl-2'">
+    <main class="flex-1 px-4 bg-#F2F2F2 " :class="leftDrawerOpen ? 'pl-63' : 'pl-2'">
       <router-view />
     </main>
   </div>
