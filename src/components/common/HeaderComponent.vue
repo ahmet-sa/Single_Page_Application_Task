@@ -27,13 +27,13 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 import Dropdown from "./dropdown.vue";
 import axiosInstance from "../../../axiosConfig.js";
 
 export default {
   name: "HeaderComponent",
-  components: { Dropdown },
+  components: {Dropdown},
   props: {
     form: Object,
     dialogTitle: String,
@@ -54,7 +54,7 @@ export default {
       this.addNew = true;
       this.$emit('addNew');
 
-      for (const { id, ...rowData } of this.selectedRows) {
+      for (const {id, ...rowData} of this.selectedRows) {
         try {
           await axiosInstance.post("users", rowData);
         } catch (error) {

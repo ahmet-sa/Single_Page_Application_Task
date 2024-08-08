@@ -1,6 +1,6 @@
 <template>
-  <header-component ref="header"  @search="search" ></header-component>
-  <table-component :search-value="searchValue" :expandable="true"   put="users" delete="users" post="users" get="users"
+  <header-component ref="header" @search="search"></header-component>
+  <table-component :search-value="searchValue" :expandable="true" put="users" delete="users" post="users" get="users"
                    :columns="columns"
   ></table-component>
 </template>
@@ -13,15 +13,15 @@ import HeaderComponent from "../components/common/HeaderComponent.vue";
 export default {
   name: "MainPage",
   components: {HeaderComponent, TableComponent},
-  data(){
-    return{
-      columns:UserColumns,
-      searchValue:"",
+  data() {
+    return {
+      columns: UserColumns,
+      searchValue: "",
     }
   },
   methods: {
-    search(val){
-      this.searchValue=val
+    search(val) {
+      this.searchValue = val
     }
   },
 };

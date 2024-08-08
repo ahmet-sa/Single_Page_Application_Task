@@ -4,7 +4,7 @@
       <thead class="h-16 text-[#606060] text-center uppercase bg-red border-l-[10px] border-r-[10px] border-[#000]">
       <tr class="items-center my-2">
         <th v-if="expandable" class="text-center bg-white">
-          <input type="checkbox" v-model="selectAll" @change="toggleSelectAll" />
+          <input type="checkbox" v-model="selectAll" @change="toggleSelectAll"/>
         </th>
         <th v-for="column in columns" :key="column.field" class="text-[#606060] text-center uppercase bg-white">
           {{ column.label }}
@@ -16,7 +16,7 @@
       <template v-for="row in paginatedRows" :key="row.id">
         <tr :class="{ 'bg-[#E3FFE4]': checkSelected(row)&& expandable }">
           <td v-if="expandable" class="p-5 text-center">
-            <input type="checkbox" :value="row.id" :checked="checkSelected(row)" @change="toggleRowSelection(row)" />
+            <input type="checkbox" :value="row.id" :checked="checkSelected(row)" @change="toggleRowSelection(row)"/>
           </td>
           <td v-for="column in columns" :key="column.field" class="p-5 text-center">
             {{ row[column.field] }}
@@ -39,11 +39,13 @@
   </div>
   <div class="flex justify-end w-full my-4 S">
     <div class="h-12 w-52 bg-white rounded-full flex items-center justify-center">
-      <div :class="{'opacity-50 cursor-not-allowed': currentPage === 1}" @click="previousPage" class="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer">
+      <div :class="{'opacity-50 cursor-not-allowed': currentPage === 1}" @click="previousPage"
+           class="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer">
         <span class="material-icons h-5">arrow_back</span>
       </div>
       <span class="mx-3">Page {{ currentPage }} of {{ totalPages }}</span>
-      <div :class="{'opacity-50 cursor-not-allowed': currentPage === totalPages}" @click="nextPage" class="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer">
+      <div :class="{'opacity-50 cursor-not-allowed': currentPage === totalPages}" @click="nextPage"
+           class="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer">
         <span class="material-icons h-5">arrow_forward</span>
       </div>
     </div>
@@ -51,22 +53,22 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 import axiosInstance from "../../../axiosConfig.js";
 import RowDetailComponent from "./RowDetailComponent.vue";
 
 export default {
   name: 'TableComponent',
-  components: { RowDetailComponent },
+  components: {RowDetailComponent},
   props: {
     columns: Array,
     searchValue: String,
-    get: { type: String, required: true },
-    post: { type: String, required: true },
-    delete: { type: String, required: true },
-    put: { type: String, required: true },
-    initialData: { type: Array, default: () => [] },
-    expandable: { default: false },
+    get: {type: String, required: true},
+    post: {type: String, required: true},
+    delete: {type: String, required: true},
+    put: {type: String, required: true},
+    initialData: {type: Array, default: () => []},
+    expandable: {default: false},
   },
   data() {
     return {
@@ -142,9 +144,11 @@ export default {
 table {
   border-spacing: 0 20px;
 }
+
 th, td {
   padding: 20px;
 }
+
 tr {
   border-top: 1px solid transparent;
 }

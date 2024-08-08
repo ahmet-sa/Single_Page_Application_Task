@@ -1,6 +1,7 @@
 <template>
-  <table-component :expandable="false"  :search-value="searchValue" put="users" delete="users" post="users" get="users"  :columns="columns"
-                    ></table-component>
+  <table-component :expandable="false"  put="users" delete="users" post="users" get="users"
+                   :columns="columns"
+  ></table-component>
 </template>
 
 <script>
@@ -9,11 +10,11 @@ import {UserColumns} from "../utils/constant.js";
 import HeaderComponent from "../components/common/HeaderComponent.vue";
 
 export default {
-  name: "UserPage" ,
+  name: "UserPage",
   components: {HeaderComponent, TableComponent},
-  data(){
-    return{
-      columns:UserColumns,
+  data() {
+    return {
+      columns: UserColumns,
     }
   },
 };
